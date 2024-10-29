@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-enum CalculatorButton: String, Identifiable {
-    case zero, one, two, three, four, five, six, seven, eight, nine, plus, minus, multiply, divide, equal, clear, decimal, percent, sign
+enum CalculatorButton: String {
+    case zero = "0", one = "1", two = "2", three = "3", four = "4", five = "5", six = "6", seven = "7", eight = "8", nine = "9", plus = "+", minus = "-", multiply = "x", divide = "/", equal = "=", clear, decimal = ".", percent = "%", sign = "-/+"
     
     var id: Self { self }
 }
@@ -32,7 +32,13 @@ struct ContentView: View {
                 .padding() //padding on the left of the placeholder
                 
                 //BUTTONS
-                
+                ForEach(buttons, id: \.self) { row in
+                    HStack(spacing: 12) {
+                        ForEach(row, id: \.self) { button in
+                            
+                        }
+                    }
+                }
             }
         }
     }
