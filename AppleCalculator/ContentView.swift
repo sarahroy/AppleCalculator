@@ -8,13 +8,38 @@
 import SwiftUI
 
 enum CalculatorButton: String {
-    case zero = "0", one = "1", two = "2", three = "3", four = "4", five = "5", six = "6", seven = "7", eight = "8", nine = "9", plus = "+", minus = "-", multiply = "x", divide = "/", equal = "=", clear, decimal = ".", percent = "%", sign = "-/+"
-    
-    var id: Self { self }
+    case zero = "0"
+    case one = "1"
+    case two = "2"
+    case three = "3"
+    case four = "4"
+    case five = "5"
+    case six = "6"
+    case seven = "7"
+    case eight = "8"
+    case nine = "9"
+    case plus = "+"
+    case minus = "-"
+    case multiply = "x"
+    case divide = "/"
+    case equal = "="
+    case clear = "AC"
+    case decimal = "."
+    case percent = "%"
+    case sign = "-/+"
+}
+enum Operations {
+    case addition, subtraction, multiplication, division, none
 }
 struct ContentView: View {
     //2D array for calc button grid
-    let buttons: [[CalculatorButton]] = []
+    let buttons: [[CalculatorButton]] = [
+        [.clear, .sign, .percent, .divide],
+        [.seven, .eight, .nine, .multiply],
+        [.four, .five, .six, .minus],
+        [.one, .two, .three, .plus],
+        [.zero, .decimal, .equal],
+    ]
     var body: some View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all) //black bg takes up all the space (corners)
@@ -32,13 +57,7 @@ struct ContentView: View {
                 .padding() //padding on the left of the placeholder
                 
                 //BUTTONS
-                ForEach(buttons, id: \.self) { row in
-                    HStack(spacing: 12) {
-                        ForEach(row, id: \.self) { button in
-                            
-                        }
-                    }
-                }
+                
             }
         }
     }
