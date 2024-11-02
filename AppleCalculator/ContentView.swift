@@ -9,11 +9,11 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var displayText = "0" //display text
-    @State private var secondNum: Double = 0 //second number chosen
     @State private var firstNum: Double = 0 //first number chosen
+    @State private var secondNum: Double = 0 //second number chosen
     
     //Enum for calculator buttons
-    enum CalculatorButton: String {
+    enum CalculatorButton: String, CaseIterable {
         case clear = "AC"
         case sign = "+/-"
         case percent = "%"
@@ -33,6 +33,10 @@ struct ContentView: View {
         case eight = "8"
         case nine = "9"
         case zero = "0"
+        
+        var title: String {
+            return self.rawValue
+        }
     }
     //Enum for calculator operations
     enum Operations: String {
@@ -42,7 +46,7 @@ struct ContentView: View {
         case division = "÷"
         case none = ""
     }
-    let buttons: [[CalculatorButton]] = [
+    let button: [[CalculatorButton]] = [
         [.clear, .sign, .percent, .divide],
         [.seven, .eight, .nine, .multiply],
         [.four, .five, .six, .minus],
@@ -68,18 +72,18 @@ struct ContentView: View {
                 .padding() //padding on the left of the placeholder
                 
                 //BUTTONS
-                ForEach(buttons, id: \.self) { row in
+                ForEach(button, id: \.self) { row in
                     HStack(spacing: 12) {
                         ForEach(row, id: \.self) { button in
                             Button(action: {
-                                self.Press(button: button)
+                                self.ButtonPress(button: button)
                             }) {
                                 Text(button)
                                     .font(.system(size: 32))
-                                    .frame(width: self.buttonWidth(button: button), height: self.buttonHeight())
-                                    .background(self.buttonColor(button: button))
+                                    .frame(width: self.ButtonWidth(button: button), height: self.ButtonHeight())
+                                    .background(self.ButtonColour(button: button))
                                     .foregroundColor(.white)
-                                    .cornerRadius(self.buttonWidth(button: button) / 2)
+                                    .cornerRadius(self.ButtonWidth(button: button) / 2)
                             }
                         }
                     }
@@ -91,12 +95,15 @@ struct ContentView: View {
     
     
     //Function that assigns button colours
-    func buttonColor(button: String) -> Color {
+    func ButtonColour(button: String) -> Color {
         switch button {
-        case "AC", "+/-", "%":
+        
+        case CalculatorButton.clear.title, CalculatorButton.sign.title, CalculatorButton.percent.title:
             return Color.gray
-        case "÷", "×", "-", "+", "=":
+            
+        case CalculatorButton.divide.title, CalculatorButton.multiply.title, CalculatorButton.minus.title, CalculatorButton.plus.title, CalculatorButton.equal.title:
             return Color.orange
+            
         default:
             return Color(.darkGray)
         }
