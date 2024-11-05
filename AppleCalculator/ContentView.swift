@@ -11,6 +11,8 @@ struct ContentView: View {
     @State private var displayText = "0" //display text
     @State private var firstNum: Double = 0 //first number chosen
     @State private var secondNum: Double = 0 //second number chosen
+    @State private var currentOperation: Operations = .none
+    @State private var isPerformingOperation = false
     
     //Enum for calculator buttons
     enum CalculatorButton: String, CaseIterable {
@@ -97,7 +99,7 @@ struct ContentView: View {
     //Function that assigns button colours
     func ButtonColour(button: String) -> Color {
         switch button {
-        
+            
         case CalculatorButton.clear.title, CalculatorButton.sign.title, CalculatorButton.percent.title:
             return Color.gray
             
@@ -126,7 +128,21 @@ struct ContentView: View {
     
     //Function that handles the selected operation
     func PerformOperation() {
-        
+        let result: Double
+        switch currentOperation {
+        case .division:
+            result = firstNum != 0 ? firstNum / secondNum : 0
+        case .multiplication:
+            result = firstNum * secondNum
+        case .subtract:
+            result = firstNum - secondNum
+        case .add:
+            result = firstNum + secondNum
+        case .none:
+            return
+        }
+        currentOperation = .none
+        isPerformingOperation = true
     }
 }
 
