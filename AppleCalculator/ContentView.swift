@@ -125,7 +125,18 @@ struct ContentView: View {
     func ButtonPress(button: CalculatorButton) {
         switch button{
         case .clear:
+            displayText = "0"
+            firstNum = 0
+            secondNum = 0
+            currentOperation = .none
         case .sign:
+            if displayText != "0" {
+                if displayText.starts(with: "-") {
+                    displayText.removeFirst()
+                } else {
+                    displayText = "-" + displayText
+                }
+            }
         case .percent:
             break
         case .divide:
@@ -135,6 +146,9 @@ struct ContentView: View {
         case .minus:
             currentOperation = .subtract
         case .plus:
+        case .decimal:
+            displayText.contains(".") ? nil : displayText += "."
+        default:
         }
     }
     
