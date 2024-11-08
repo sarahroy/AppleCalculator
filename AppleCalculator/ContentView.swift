@@ -169,7 +169,17 @@ struct ContentView: View {
         }
         currentOperation = .none
         isPerformingOperation = true
+        display = formatDisplay(result) // Format the result for display
     }
+    // Function to format the display
+        func formatDisplay(_ value: Double) -> String {
+            // Check if the result is an integer
+            if value.truncatingRemainder(dividingBy: 1) == 0 {
+                return String(Int(value)) // Return as an integer string
+            } else {
+                return String(format: "%.1f", value) // Return with one decimal place
+            }
+        }
 }
 
 #Preview {
