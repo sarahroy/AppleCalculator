@@ -122,8 +122,20 @@ struct ContentView: View {
     }
     
     //Function that handles button presses
-    func ButtonPress() {
-        
+    func ButtonPress(button: CalculatorButton) {
+        switch button{
+        case .clear:
+        case .sign:
+        case .percent:
+            break
+        case .divide:
+            currentOperation = .division
+        case .multiply:
+            currentOperation = .multiplication
+        case .minus:
+            currentOperation = .subtract
+        case .plus:
+        }
     }
     
     //Function that handles the selected operation
