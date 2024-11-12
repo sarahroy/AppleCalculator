@@ -101,13 +101,13 @@ struct ContentView: View {
         switch button {
             
         case CalculatorButton.clear.title, CalculatorButton.sign.title, CalculatorButton.percent.title:
-            return Color.gray
+            return Color.gray //AC, +/- and % buttons are gray
             
         case CalculatorButton.divide.title, CalculatorButton.multiply.title, CalculatorButton.minus.title, CalculatorButton.plus.title, CalculatorButton.equal.title:
-            return Color.orange
+            return Color.orange //operation buttons are orange
             
         default:
-            return Color(.darkGray)
+            return Color(.darkGray) //all buttons are dark gray
         }
     }
     
@@ -124,7 +124,7 @@ struct ContentView: View {
     //Function that handles button presses
     func ButtonPress(button: CalculatorButton) {
         switch button{
-        case .clear: //AC
+        case .clear: //AC - All Clear
             displayText = "0"
             firstNum = 0
             secondNum = 0
@@ -153,7 +153,9 @@ struct ContentView: View {
             currentOperation = .add
             isPerformingOperation = true
         case .decimal:
-            displayText.contains(".") ? null : displayText += "."
+            if !displayText.contains(".") {
+                displayText += "."
+            }
         case .equal:
             if let number = Double(displayText) {
                 secondNum = number
@@ -189,13 +191,13 @@ struct ContentView: View {
         isPerformingOperation = true
         displayText = formatDisplay(result) // Format the result for display
     }
-    // Function to format the display
+    //Function to format the display for whole number values
     func formatDisplay(_ value: Double) -> String {
-        // Check if the result is an integer
+        //Check if the result is an integer
         if value.truncatingRemainder(dividingBy: 1) == 0 {
-            return String(Int(value)) // Return as an integer string
+            return String(Int(value)) //Return as an integer string
         } else {
-            return String(format: "%.1f", value) // Return with one decimal place
+            return String(format: "%.1f", value) //Return with one decimal place
         }
     }
 }
