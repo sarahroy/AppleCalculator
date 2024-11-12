@@ -124,12 +124,12 @@ struct ContentView: View {
     //Function that handles button presses
     func ButtonPress(button: CalculatorButton) {
         switch button{
-        case .clear:
+        case .clear: //AC
             displayText = "0"
             firstNum = 0
             secondNum = 0
             currentOperation = .none
-        case .sign:
+        case .sign: //+/-
             if displayText != "0" {
                 if displayText.starts(with: "-") {
                     displayText.removeFirst()
@@ -137,18 +137,36 @@ struct ContentView: View {
                     displayText = "-" + displayText
                 }
             }
-        case .percent:
-            break
+        case .percent: //%
+            let value = (Double(displayText) ?? 0) / 100
+            displayText = formatDisplay(value)
         case .divide:
             currentOperation = .division
+            isPerformingOperation = true
         case .multiply:
             currentOperation = .multiplication
+            isPerformingOperation = true
         case .minus:
             currentOperation = .subtract
+            isPerformingOperation = true
         case .plus:
+            currentOperation = .add
+            isPerformingOperation = true
         case .decimal:
-            displayText.contains(".") ? nil : displayText += "."
+            displayText.contains(".") ? null : displayText += "."
+        case .equal:
+            if let number = Double(displayText) {
+                secondNum = number
+                PerformOperation()
+            }
         default:
+            let number = button.title
+            if isPerformingOperation {
+                displayText = number
+                isPerformingOperation = false
+            } else {
+                displayText = displayText == "0" ? number : displayText + number
+            }
         }
     }
     
@@ -169,17 +187,17 @@ struct ContentView: View {
         }
         currentOperation = .none
         isPerformingOperation = true
-        display = formatDisplay(result) // Format the result for display
+        displayText = formatDisplay(result) // Format the result for display
     }
     // Function to format the display
-        func formatDisplay(_ value: Double) -> String {
-            // Check if the result is an integer
-            if value.truncatingRemainder(dividingBy: 1) == 0 {
-                return String(Int(value)) // Return as an integer string
-            } else {
-                return String(format: "%.1f", value) // Return with one decimal place
-            }
+    func formatDisplay(_ value: Double) -> String {
+        // Check if the result is an integer
+        if value.truncatingRemainder(dividingBy: 1) == 0 {
+            return String(Int(value)) // Return as an integer string
+        } else {
+            return String(format: "%.1f", value) // Return with one decimal place
         }
+    }
 }
 
 #Preview {
