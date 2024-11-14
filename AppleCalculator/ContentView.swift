@@ -112,13 +112,13 @@ struct ContentView: View {
     }
     
     //Function that assigns button width
-    func ButtonWidth() {
-        
+    func ButtonWidth(button: String) -> CGFloat {
+        return button == CalculatorButton.zero.title ? (UIScreen.main.bounds.width - 5 * 12) / 2 : (UIScreen.main.bounds.width - 5 * 12) / 4
     }
     
     //Function that assigns button height
-    func ButtonHeight(){
-        
+    func ButtonHeight() -> CGFloat{
+        return 80; //will be changed
     }
     
     //Function that handles button presses
