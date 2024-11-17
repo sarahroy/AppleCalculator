@@ -15,3 +15,6 @@ Sign Toggle: Switch between positive and negative numbers using the +/- button.
 Clear Function: Reset the current calculation with the AC button.
 Decimal Support: Add decimal numbers and perform operations with decimals.
 Responsive Layout: The app adapts well to different screen sizes.
+
+# Screenshot
+<img width="369" alt="image" src="https://github.com/user-attachments/assets/903c56e4-14e3-475a-b685-1282161e1eb9">
