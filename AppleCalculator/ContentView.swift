@@ -129,23 +129,27 @@ struct ContentView: View {
             displayText = formatDisplay(value)
         case .divide:
             currentOperation = .division
-            isPerformingOperation = true
+            firstNum = Double(displayText) ?? 0
+            displayText = "0" // Reset display for the next number
         case .multiply:
             currentOperation = .multiplication
-            isPerformingOperation = true
+            firstNum = Double(displayText) ?? 0
+            displayText = "0" // Reset display for the next number
         case .minus:
             currentOperation = .subtract
-            isPerformingOperation = true
+            firstNum = Double(displayText) ?? 0
+            displayText = "0" // Reset display for the next number
         case .plus:
             currentOperation = .add
-            isPerformingOperation = true
+            firstNum = Double(displayText) ?? 0
+            displayText = "0" // Reset display for the next number
         case .decimal:
             if !displayText.contains(".") {
                 displayText += "."
             }
         case .equal:
             if let number = Double(displayText) {
-                secondNum = number
+                secondNum = number //Store the second number
                 PerformOperation()
             }
         default:
