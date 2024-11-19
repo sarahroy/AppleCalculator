@@ -149,8 +149,8 @@ struct ContentView: View {
             }
         case .equal:
             if let number = Double(displayText) {
-                secondNum = number //Store the second number
-                PerformOperation()
+                secondNum = number // Store the second number
+                PerformOperation() // Perform the operation when "=" is pressed
             }
         default:
             let number = button.title
@@ -163,26 +163,30 @@ struct ContentView: View {
         }
     }
     
-    // Function that handles the selected operation
+    //Function that handles the selected operation
     func PerformOperation() {
-        let result: Double
+        var expression = "\(firstNum)" // Start with the first number
+        
+        //Append the current operation symbol and the second number
         switch currentOperation {
-        case .division:
-            result = firstNum != 0 ? firstNum / secondNum : 0
-        case .multiplication:
-            result = firstNum * secondNum
-        case .subtract:
-            result = firstNum - secondNum
         case .add:
-            result = firstNum + secondNum
+            expression += " + \(secondNum)"
+        case .subtract:
+            expression += " - \(secondNum)"
+        case .multiplication:
+            expression += " * \(secondNum)" //Replace × with *
+        case .division:
+            expression += " / \(secondNum)" //Replace ÷ with /
         case .none:
             return
         }
-        currentOperation = .none
+        
+        // Evaluate the expression and update display text
+        let result = evaluateExpression(expression)
+        displayText = formatDisplay(result)
         isPerformingOperation = true
-        displayText = formatDisplay(result) // Format the result for display
     }
-
+    
     // Function to format the display for whole number values
     func formatDisplay(_ value: Double) -> String {
         // Check if the result is an integer
@@ -191,6 +195,19 @@ struct ContentView: View {
         } else {
             return String(format: "%.1f", value) // Return with one decimal place
         }
+    }
+    
+    // Function to evaluate the expression string
+    func evaluateExpression(_ expression: String) -> Double {
+        // Replace ÷ with / and × with * before passing to NSExpression
+        let expressionWithCorrectOperators = expression
+            .replacingOccurrences(of: "÷", with: "/")
+            .replacingOccurrences(of: "×", with: "*")
+        
+        // Use NSExpression to evaluate the expression (handles BODMAS)
+        let nsExpression = NSExpression(format: expressionWithCorrectOperators)
+        let result = nsExpression.expressionValue(with: nil, context: nil) as? Double ?? 0
+        return result
     }
 }
 
