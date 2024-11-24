@@ -6,7 +6,8 @@ struct ContentView: View {
     @State private var secondNum: Double = 0 // Second number chosen
     @State private var currentOperation: Operations = .none
     @State private var isPerformingOperation = false
-
+    @State private var OperationsQ: [String] = [] //queue for operators
+    
     // Enum for calculator buttons
     enum CalculatorButton: String, CaseIterable {
         case clear = "AC"
@@ -113,9 +114,7 @@ struct ContentView: View {
         switch button {
         case .clear: // AC - All Clear
             displayText = "0"
-            firstNum = 0
-            secondNum = 0
-            currentOperation = .none
+            OperationsQ = [] // Reset operations queue
         case .sign: // +/- button
             if displayText != "0" {
                 if displayText.starts(with: "-") {
@@ -127,64 +126,44 @@ struct ContentView: View {
         case .percent: // % button
             let value = (Double(displayText) ?? 0) / 100
             displayText = formatDisplay(value)
-        case .divide:
-            currentOperation = .division
-            firstNum = Double(displayText) ?? 0
-            displayText = "0" // Reset display for the next number
-        case .multiply:
-            currentOperation = .multiplication
-            firstNum = Double(displayText) ?? 0
-            displayText = "0" // Reset display for the next number
-        case .minus:
-            currentOperation = .subtract
-            firstNum = Double(displayText) ?? 0
-            displayText = "0" // Reset display for the next number
-        case .plus:
-            currentOperation = .add
-            firstNum = Double(displayText) ?? 0
+        case .divide, .multiply, .minus, .plus: // Operation buttons
+            // Add current number to operations queue
+            OperationsQ.append(displayText)
+            OperationsQ.append(button.title)
             displayText = "0" // Reset display for the next number
         case .decimal:
             if !displayText.contains(".") {
                 displayText += "."
             }
-        case .equal:
-            if let number = Double(displayText) {
-                secondNum = number // Store the second number
-                PerformOperation() // Perform the operation when "=" is pressed
-            }
+        case .equal: // "=" button
+            OperationsQ.append(displayText) // Add the last number to the queue
+            let result = evaluateExpression()
+            displayText = formatDisplay(result)
+            OperationsQ = [] // Clear the operations queue after calculation
         default:
             let number = button.title
-            if isPerformingOperation {
+            if displayText == "0" {
                 displayText = number
-                isPerformingOperation = false
             } else {
-                displayText = displayText == "0" ? number : displayText + number
+                displayText += number
             }
         }
     }
     
-    //Function that handles the selected operation
-    func PerformOperation() {
-        var expression = "\(firstNum)" // Start with the first number
+    // Function to evaluate the operations queue
+    func evaluateExpression() -> Double {
+        //converting OperationsQ to string
+        let str = OperationsQ.joined(separator: " ")
         
-        //Append the current operation symbol and the second number
-        switch currentOperation {
-        case .add:
-            expression += " + \(secondNum)"
-        case .subtract:
-            expression += " - \(secondNum)"
-        case .multiplication:
-            expression += " * \(secondNum)" //Replace × with *
-        case .division:
-            expression += " / \(secondNum)" //Replace ÷ with /
-        case .none:
-            return
-        }
+        //Replace ÷ with / and × with * before passing to NSExpression
+        let expressionWithCorrectOperators = str
+            .replacingOccurrences(of: "÷", with: "/")
+            .replacingOccurrences(of: "×", with: "*")
         
-        // Evaluate the expression and update display text
-        let result = evaluateExpression(expression)
-        displayText = formatDisplay(result)
-        isPerformingOperation = true
+        //Using NSExpression to evaluate the expression (handles PEMDAS order of operations)
+        let nsExpression = NSExpression(format: expressionWithCorrectOperators)
+        let result = nsExpression.expressionValue(with: nil, context: nil) as? Double ?? 0
+        return result
     }
     
     // Function to format the display for whole number values
@@ -195,19 +174,6 @@ struct ContentView: View {
         } else {
             return String(format: "%.1f", value) // Return with one decimal place
         }
-    }
-    
-    // Function to evaluate the expression string
-    func evaluateExpression(_ expression: String) -> Double {
-        // Replace ÷ with / and × with * before passing to NSExpression
-        let expressionWithCorrectOperators = expression
-            .replacingOccurrences(of: "÷", with: "/")
-            .replacingOccurrences(of: "×", with: "*")
-        
-        // Use NSExpression to evaluate the expression (handles BODMAS)
-        let nsExpression = NSExpression(format: expressionWithCorrectOperators)
-        let result = nsExpression.expressionValue(with: nil, context: nil) as? Double ?? 0
-        return result
     }
 }
 
