@@ -39,7 +39,7 @@ struct ContentView: View {
     enum Operations {
         case add, subtract, multiplication, division, none
     }
-
+    
     let button: [[CalculatorButton]] = [
         [.clear, .sign, .percent, .divide],
         [.seven, .eight, .nine, .multiply],
@@ -160,6 +160,11 @@ struct ContentView: View {
             .replacingOccurrences(of: "÷", with: "/")
             .replacingOccurrences(of: "×", with: "*")
         
+        //division by zero before evaluating
+        if expressionWithCorrectOperators.contains("/ 0") {
+            displayText = "Undefined"
+            return 0 // Return 0, but display "Undefined"
+        }
         //Using NSExpression to evaluate the expression (handles PEMDAS order of operations)
         let nsExpression = NSExpression(format: expressionWithCorrectOperators)
         let result = nsExpression.expressionValue(with: nil, context: nil) as? Double ?? 0
