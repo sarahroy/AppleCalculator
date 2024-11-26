@@ -7,6 +7,7 @@ struct ContentView: View {
     @State private var currentOperation: Operations = .none
     @State private var isPerformingOperation = false
     @State private var OperationsQ: [String] = [] //queue for operators
+    @State private var operandsQ: [Double] = [] // Queue for operands
     
     // Enum for calculator buttons
     enum CalculatorButton: String, CaseIterable {
@@ -113,7 +114,9 @@ struct ContentView: View {
         switch button {
         case .clear: // AC - All Clear
             displayText = "0"
-            OperationsQ = [] // Reset operations queue
+            operandsQ.removeAll() // Clear operands q
+            OperationsQ.removeAll() // Clear operators q
+            
         case .sign: // +/- button
             if displayText != "0" {
                 if displayText.starts(with: "-") {
@@ -123,23 +126,34 @@ struct ContentView: View {
                 }
             }
         case .percent: // % button
-            let value = (Double(displayText) ?? 0) / 100
-            displayText = formatDisplay(value)
+            if let lastValue = Double(displayText) {
+                // For percent: multiply by 0.01
+                let result = lastValue * 0.01
+                displayText = formatDisplay(result)
+                operandsQ.append(result) // Save the result for future operations
+            }
         case .divide, .multiply, .minus, .plus: // Operation buttons
-            // Add current number to operations queue
-            OperationsQ.append(displayText)
-            OperationsQ.append(button.title)
-            displayText = "0" // Reset display for the next number
-        case .decimal:
+            // If there's a number on the screen, push it to the operands queue
+            if let currentValue = Double(displayText) {
+                operandsQ.append(currentValue)
+                OperationsQ.append(button.title) // Store the operator
+                displayText = "0" // Reset the display for the next input
+            }
+        case .decimal: // . button
             if !displayText.contains(".") {
                 displayText += "."
             }
         case .equal: // "=" button
-            OperationsQ.append(displayText) // Add the last number to the queue
+            // Add the last value to operands
+            if let currentValue = Double(displayText) {
+                operandsQ.append(currentValue)
+            }
             let result = evaluateExpression()
             displayText = formatDisplay(result)
-            OperationsQ = [] // Clear the operations queue after calculation
+            operandsQ.removeAll() // Clear the operands q
+            OperationsQ.removeAll() // Clear the operators q
         default:
+            // Number buttons (0-9)
             let number = button.title
             if displayText == "0" {
                 displayText = number
@@ -151,32 +165,35 @@ struct ContentView: View {
     
     // Function to evaluate the operations queue
     func evaluateExpression() -> Double {
-        //converting OperationsQ to string
-        let str = OperationsQ.joined(separator: " ")
+        // Handle operations in the queue
+        var result = operandsQ.first ?? 0
         
-        //Replace ÷ with / and × with * before passing to NSExpression
-        let expressionWithCorrectOperators = str
-            .replacingOccurrences(of: "÷", with: "/")
-            .replacingOccurrences(of: "×", with: "*")
-        
-        //division by zero before evaluating
-        if expressionWithCorrectOperators.contains("/ 0") {
-            displayText = "Undefined"
-            return 0 // Return 0, but display "Undefined"
+        for (index, operatorSymbol) in OperationsQ.enumerated() {
+            let operand = operandsQ[index + 1]
+            
+            switch operatorSymbol {
+            case "+":
+                result += operand
+            case "-":
+                result -= operand
+            case "×":
+                result *= operand
+            case "÷":
+                result /= operand
+            default:
+                break
+            }
         }
-        //Using NSExpression to evaluate the expression (handles PEMDAS order of operations)
-        let nsExpression = NSExpression(format: expressionWithCorrectOperators)
-        let result = nsExpression.expressionValue(with: nil, context: nil) as? Double ?? 0
+        
         return result
     }
     
     // Function to format the display for whole number values
     func formatDisplay(_ value: Double) -> String {
-        // Check if the result is an integer
         if value.truncatingRemainder(dividingBy: 1) == 0 {
             return String(Int(value)) // Return as an integer string
         } else {
-            return String(format: "%.1f", value) // Return with one decimal place
+            return String(format: "%.2f", value) // Return with two decimal places
         }
     }
 }
