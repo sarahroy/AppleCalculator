@@ -73,7 +73,7 @@ struct ContentView: View {
                                 self.ButtonPress(button: button)
                             }) {
                                 Text(button.title)
-                                    .font(.system(size: 32))
+                                    .font(.system(size: 45))
                                     .frame(width: self.ButtonWidth(button: button), height: self.ButtonHeight())
                                     .background(self.ButtonColour(button: button))
                                     .foregroundColor(.white)
