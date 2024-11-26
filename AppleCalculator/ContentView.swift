@@ -59,8 +59,7 @@ struct ContentView: View {
                 HStack { // Horizontal stack - to align to the right
                     Spacer() // Push text to the rightmost end
                     Text(displayText) // Placeholder text
-                        .bold() // Make text bold
-                        .font(.system(size: 64)) // Font size
+                        .font(.system(size: 70)) // Font size
                         .foregroundColor(.white) // Font color
                 }
                 .padding() // Padding on the left of the placeholder
@@ -73,7 +72,7 @@ struct ContentView: View {
                                 self.ButtonPress(button: button)
                             }) {
                                 Text(button.title)
-                                    .font(.system(size: 45))
+                                    .font(.system(size: 40))
                                     .frame(width: self.ButtonWidth(button: button), height: self.ButtonHeight())
                                     .background(self.ButtonColour(button: button))
                                     .foregroundColor(.white)
