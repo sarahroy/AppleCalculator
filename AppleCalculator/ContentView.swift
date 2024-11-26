@@ -2,10 +2,6 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var displayText = "0" // Display text
-    @State private var firstNum: Double = 0 // First number chosen
-    @State private var secondNum: Double = 0 // Second number chosen
-    @State private var currentOperation: Operations = .none
-    @State private var isPerformingOperation = false
     @State private var OperationsQ: [String] = [] //queue for operators
     @State private var operandsQ: [Double] = [] // Queue for operands
     
