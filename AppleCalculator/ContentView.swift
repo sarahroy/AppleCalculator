@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var displayText = "0" // Display text
+    @State private var expText = "3+5÷4" //expression text
     @State private var OperationsQ: [String] = [] //queue for operators
     @State private var operandsQ: [Double] = [] // Queue for operands
     
@@ -51,13 +52,22 @@ struct ContentView: View {
             
             VStack { // Vertical stack
                 Spacer()
-                
+                // EXPRESSION TEXT DISPLAY (Above the text display)
+                HStack { // Horizontal stack - to align to the right
+                    Spacer() // Push text to the rightmost end
+                    Text(expText) // Display the expression text
+                        .font(.system(size: 40)) // Font size 20
+                        .foregroundColor(.gray) // Font color
+                        .bold()
+                }
+                .padding(.bottom, 2) // Add some space below the expression text
                 // TEXT DISPLAY
                 HStack { // Horizontal stack - to align to the right
                     Spacer() // Push text to the rightmost end
                     Text(displayText) // Placeholder text
                         .font(.system(size: 70)) // Font size
                         .foregroundColor(.white) // Font color
+                        .bold()
                 }
                 .padding() // Padding on the left of the placeholder
                 
@@ -110,6 +120,7 @@ struct ContentView: View {
         switch button {
         case .clear: // AC - All Clear
             displayText = "0"
+            expText = ""
             operandsQ.removeAll() // Clear operands q
             OperationsQ.removeAll() // Clear operators q
             
