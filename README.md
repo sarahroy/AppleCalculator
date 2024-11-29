@@ -17,4 +17,4 @@ Decimal Support: Add decimal numbers and perform operations with decimals.
 Responsive Layout: The app adapts well to different screen sizes.
 
 # Screenshot
-<img width="369" alt="image" src="https://github.com/user-attachments/assets/903c56e4-14e3-475a-b685-1282161e1eb9">
+<img width="369" alt="image" src="https://github.com/user-attachments/assets/009a67bc-319a-4efb-97be-1a70f5d22e35">
