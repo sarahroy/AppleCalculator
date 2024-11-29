@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var displayText = "0" // Display text
-    @State private var expText = "3+5÷4" //expression text
+    @State private var expText = "3 + 5 ÷ 4" //expression text
     @State private var OperationsQ: [String] = [] //queue for operators
     @State private var operandsQ: [Double] = [] // Queue for operands
     
@@ -56,11 +56,10 @@ struct ContentView: View {
                 HStack { // Horizontal stack - to align to the right
                     Spacer() // Push text to the rightmost end
                     Text(expText) // Display the expression text
-                        .font(.system(size: 40)) // Font size 20
+                        .font(.system(size: 30)) // Font size 20
                         .foregroundColor(.gray) // Font color
-                        .bold()
                 }
-                .padding(.bottom, 2) // Add some space below the expression text
+                .frame(height: 2) // Add some space below the expression text
                 // TEXT DISPLAY
                 HStack { // Horizontal stack - to align to the right
                     Spacer() // Push text to the rightmost end
@@ -88,6 +87,13 @@ struct ContentView: View {
                         }
                     }
                 }
+                //Footer Text
+                Text("Sarah Roy 2024")
+                    .font(.system(size: 15)) // Font size 20
+                    .bold()
+                    .foregroundColor(.gray) // Font color gray
+                    .padding(.top, 10) // Padding to reduce space between buttons and footer
+                    .padding(.bottom, 1) // Padding to give some space from the bottom
             }
             .padding()
         }
