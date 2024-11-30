@@ -59,6 +59,7 @@ struct ContentView: View {
                         .font(.system(size: 30)) // Font size 20
                         .foregroundColor(.gray) // Font color
                 }
+                .padding()
                 .frame(height: 2) // Add some space below the expression text
                 // TEXT DISPLAY
                 HStack { // Horizontal stack - to align to the right
