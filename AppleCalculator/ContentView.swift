@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var displayText = "0" // Display text
-    @State private var expText = "3 + 5 ÷ 4" //expression text
+    @State private var expText = "" //expression text
     @State private var OperationsQ: [String] = [] //queue for operators
     @State private var operandsQ: [Double] = [] // Queue for operands
     
@@ -134,8 +134,10 @@ struct ContentView: View {
             if displayText != "0" {
                 if displayText.starts(with: "-") {
                     displayText.removeFirst()
+                    expText += displayText
                 } else {
                     displayText = "-" + displayText
+                    expText += displayText
                 }
             }
         case .percent: // % button
@@ -150,17 +152,20 @@ struct ContentView: View {
             if let currentValue = Double(displayText) {
                 operandsQ.append(currentValue)
                 OperationsQ.append(button.title) // Store the operator
+                expText += " " + button.title // Append the operator to expression text before resetting display
                 displayText = "0" // Reset the display for the next input
             }
         case .decimal: // . button
             if !displayText.contains(".") {
                 displayText += "."
+                expText += displayText
             }
         case .equal: // "=" button
             // Add the last value to operands
             if let currentValue = Double(displayText) {
                 operandsQ.append(currentValue)
             }
+            expText += " " + displayText //Append the final operand to the expression
             let result = evaluateExpression()
             displayText = formatDisplay(result)
             operandsQ.removeAll() // Clear the operands q
@@ -172,6 +177,10 @@ struct ContentView: View {
                 displayText = number
             } else {
                 displayText += number
+            }
+            if expText.isEmpty || expText.last == " " {
+                // Only append the number if it's not the first entry or after an operator
+                expText += number
             }
         }
     }
