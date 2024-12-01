@@ -159,7 +159,7 @@ struct ContentView: View {
         case .decimal: // . button
             if !displayText.contains(".") {
                 displayText += "."
-                expText += displayText
+                expText += "."
             }
         case .equal: // "=" button
             // Add the last value to operands
@@ -216,7 +216,7 @@ struct ContentView: View {
         if value.truncatingRemainder(dividingBy: 1) == 0 {
             return String(Int(value)) // Return as an integer string
         } else {
-            return String(format: "%.2f", value) // Return with two decimal places
+            return String(format: "%g", value) // Return with least amount of trailing zeroes
         }
     }
 }
