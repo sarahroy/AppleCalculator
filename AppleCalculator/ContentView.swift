@@ -89,7 +89,7 @@ struct ContentView: View {
                     }
                 }
                 //Footer Text
-                Text("Sarah Roy 2024")
+                Text("\u{00A9} 2024 Sarah Roy ")
                     .font(.system(size: 15)) // Font size 20
                     .bold()
                     .foregroundColor(.gray) // Font color gray
